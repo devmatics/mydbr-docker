@@ -18,8 +18,6 @@ RUN apk add 'php8=~8.0'
 RUN apk add 'php8-fpm=~8.0'
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY php.ini /etc/php8/php.ini
-COPY php-fpm.conf /etc/php8/php-fpm.conf
 
 COPY --from=mydbr-download mydbr /usr/share/nginx/html
 
