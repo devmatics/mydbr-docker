@@ -15,12 +15,15 @@ RUN apk update && apk upgrade
 RUN apk add bash
 RUN apk add nginx
 RUN apk add 'php8=~8.0'
+RUN apk add 'php8-fpm=~8.0'
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY php.ini /etc/php8/php.ini
+COPY php-fpm.conf /etc/php8/php-fpm.conf
 
-COPY mydbr /usr/share/nginx/html
+COPY --from=mydbr-download mydbr /usr/share/nginx/html
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+STOPSIGNAL SIGTERM
+CMD ["/bin/bash", "-c", "php-fpm8 && chmod 777 /var/run/php/php8-fpm.sock && chmod 755 /usr/share/nginx/html/* && nginx -g 'daemon off;'"]
