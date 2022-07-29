@@ -1,0 +1,32 @@
+name: Build MyDBR Latest
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: mydbr
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Login to Github Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}"" | docker login ghcr.io -u $ --password-stdin
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME .
+
+      - name: Push Docker Image to Github Container Registry
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker push --all-tags $IMAGE_ID
