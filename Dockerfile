@@ -5,8 +5,8 @@ RUN apk add bash
 RUN apk add curl
 RUN apk add unzip
 
-RUN curl -o mydbr_php8_sg.zip https://mydbr.com/fileserve.php?get=mydbr_php8_sg.zip
-RUN unzip mydbr_php8_sg.zip
+RUN curl -o mydbr_php81_sg.zip https://mydbr.com/fileserve.php?get=mydbr_php81_sg.zip
+RUN unzip mydbr_php81_sg.zip
 
 RUN mkdir /sourceguardian
 RUN curl -o sourceguardian.zip https://www.sourceguardian.com/loaders/download/loaders.linux-x86_64.zip
@@ -18,8 +18,6 @@ RUN tar -xvzf chartdirector.tar.gz -C /chartdirector
 
 FROM alpine:3.16 as base-php
 
-# We pin to php 8.0 as MyDBR has different branches for 8.0 and 8.1. If Alpine's PHP8 package updates to 8.1, change our pinning here.
-
 RUN apk update && apk upgrade
 
 RUN apk add bash
@@ -27,43 +25,47 @@ RUN apk add curl
 
 RUN apk add nginx
 
-RUN apk add 'php8=~8.0'
-RUN apk add 'php8-bcmath=~8.0'
-RUN apk add 'php8-calendar=~8.0'
-RUN apk add 'php8-ctype=~8.0'
-RUN apk add 'php8-curl=~8.0'
-RUN apk add 'php8-dom=~8.0'
-RUN apk add 'php8-exif=~8.0'
-RUN apk add 'php8-ffi=~8.0'
-RUN apk add 'php8-fileinfo=~8.0'
-RUN apk add 'php8-fpm=~8.0'
-RUN apk add 'php8-ftp=~8.0'
-RUN apk add 'php8-gd=~8.0'
-RUN apk add 'php8-gettext=~8.0'
-RUN apk add 'php8-iconv=~8.0'
-RUN apk add 'php8-imap=~8.0'
-RUN apk add 'php8-mbstring=~8.0'
-RUN apk add 'php8-mysqli=~8.0'
-RUN apk add 'php8-mysqlnd=~8.0'
-RUN apk add 'php8-pcntl=~8.0'
-RUN apk add 'php8-pdo=~8.0'
-RUN apk add 'php8-pdo_mysql=~8.0'
-RUN apk add 'php8-phar=~8.0'
-RUN apk add 'php8-posix=~8.0'
-RUN apk add 'php8-session=~8.0'
-RUN apk add 'php8-shmop=~8.0'
-RUN apk add 'php8-simplexml=~8.0'
-RUN apk add 'php8-sockets=~8.0'
-RUN apk add 'php8-sodium=~8.0'
-RUN apk add 'php8-sysvmsg=~8.0'
-RUN apk add 'php8-sysvsem=~8.0'
-RUN apk add 'php8-sysvshm=~8.0'
-RUN apk add 'php8-tokenizer=~8.0'
-RUN apk add 'php8-xml=~8.0'
-RUN apk add 'php8-xmlreader=~8.0'
-RUN apk add 'php8-xmlwriter=~8.0'
-RUN apk add 'php8-xsl=~8.0'
-RUN apk add 'php8-zip=~8.0'
+RUN apk add php81
+RUN apk add php81-bcmath
+RUN apk add php81-calendar
+RUN apk add php81-ctype
+RUN apk add php81-curl
+RUN apk add php81-dom
+RUN apk add php81-exif
+RUN apk add php81-ffi
+RUN apk add php81-fileinfo
+RUN apk add php81-fpm
+RUN apk add php81-ftp
+RUN apk add php81-gd
+RUN apk add php81-gettext
+RUN apk add php81-iconv
+# Cannot use the php 8.x intl package with wkhtmltopdf as they require different icu-libs versions
+#RUN apk add php81-intl
+RUN apk add php81-imap
+RUN apk add php81-ldap
+RUN apk add php81-mbstring
+RUN apk add php81-mysqli
+RUN apk add php81-mysqlnd
+RUN apk add php81-openssl
+RUN apk add php81-pcntl
+RUN apk add php81-pdo
+RUN apk add php81-pdo_mysql
+RUN apk add php81-phar
+RUN apk add php81-posix
+RUN apk add php81-session
+RUN apk add php81-shmop
+RUN apk add php81-simplexml
+RUN apk add php81-sockets
+RUN apk add php81-sodium
+RUN apk add php81-sysvmsg
+RUN apk add php81-sysvsem
+RUN apk add php81-sysvshm
+RUN apk add php81-tokenizer
+RUN apk add php81-xml
+RUN apk add php81-xmlreader
+RUN apk add php81-xmlwriter
+RUN apk add php81-xsl
+RUN apk add php81-zip
 
 RUN apk add graphviz
 
@@ -133,8 +135,8 @@ COPY src/php-fpm-www.conf /etc/php8/php-fpm.d/www.conf
 
 COPY src/phpinfo.php /usr/share/nginx/html/phpinfo.php
 
-COPY --from=mydbr-download sourceguardian/ixed.8.0.lin /usr/lib/php8/modules/ixed.8.0.lin
-COPY --from=mydbr-download chartdirector/ChartDirector/lib/phpchartdir800.dll /usr/lib/php8/modules/phpchartdir800.dll
+COPY --from=mydbr-download sourceguardian/ixed.8.1.lin /usr/lib/php8/modules/ixed.8.1.lin
+COPY --from=mydbr-download chartdirector/ChartDirector/lib/phpchartdir810.dll /usr/lib/php8/modules/phpchartdir810.dll
 COPY --from=mydbr-download chartdirector/ChartDirector/lib/phpchartdir.php /usr/lib/php8/modules/phpchartdir.php
 COPY --from=mydbr-download chartdirector/ChartDirector/lib/libchartdir.so /usr/lib/php8/modules/libchartdir.so
 COPY --from=mydbr-download chartdirector/ChartDirector/lib/fonts /usr/lib/php8/modules/fonts
