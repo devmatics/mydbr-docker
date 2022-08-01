@@ -1,4 +1,4 @@
-FROM alpine:latest as mydbr-download
+FROM alpine:3.16 as mydbr-download
 
 RUN apk update && apk upgrade
 RUN apk add bash
@@ -16,7 +16,7 @@ RUN mkdir /chartdirector
 RUN curl -o chartdirector.tar.gz https://www.advsofteng.net/chartdir_php_linux_64.tar.gz
 RUN tar -xvzf chartdirector.tar.gz -C /chartdirector
 
-FROM alpine:latest as base-php
+FROM alpine:3.16 as base-php
 
 # We pin to php 8.0 as MyDBR has different branches for 8.0 and 8.1. If Alpine's PHP8 package updates to 8.1, change our pinning here.
 
@@ -77,6 +77,12 @@ FROM base-php as base-php-wkhtmltopdf
 # the WkHTMLToPDF maintainer recommends weasyprint
 # See https://wkhtmltopdf.org/status.html#recommendations
 # See https://github.com/Kozea/WeasyPrint
+
+# For now, needs testing, but we can pull down the Alpine 3.14 packages for WkHTMLToPDF and use those.
+# This appears to work on a surface level but needs testing to determine if the seg-faulting issue
+# Reported Here: https://gitlab.alpinelinux.org/alpine/aports/-/issues/12110
+# occurs or not. If it does, we may need to build a patched QT ourselves similar to:
+# https://github.com/RoseRocket/docker-alpine-wkhtmltopdf-patched-qt/blob/master/Dockerfile
 
 RUN mkdir -p /download
 
