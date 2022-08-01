@@ -84,6 +84,9 @@ FROM base-php as base-php-wkhtmltopdf
 # occurs or not. If it does, we may need to build a patched QT ourselves similar to:
 # https://github.com/RoseRocket/docker-alpine-wkhtmltopdf-patched-qt/blob/master/Dockerfile
 
+# Thick distros like Ubuntu currently maintain their own version of QtWebkit with custom patches:
+# See https://git.launchpad.net/ubuntu/+source/qtwebkit-opensource-src/?h=ubuntu/jammy
+
 RUN mkdir -p /download
 
 RUN curl -o /download/icu-libs-67.1-r2.apk https://dl-cdn.alpinelinux.org/alpine/v3.14/main/x86_64/icu-libs-67.1-r2.apk
