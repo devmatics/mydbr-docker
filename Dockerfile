@@ -68,7 +68,7 @@ RUN apk add 'php8-zip=~8.0'
 RUN apk add graphviz
 
 FROM base-php as base-php-wkhtmltopdf
-# WkHTMLToPDF lost Alpine support in 3.14 due to its primary dependecy Qt5-QtWebkit being unmainted for 3 years now.
+# WkHTMLToPDF lost Alpine support in 3.15 due to its primary dependecy Qt5-QtWebkit being unmainted for 3 years now.
 
 # WkHTMLToPDF has been on life support since 2016 and the project is dead as of 2020 by admission of the maintainer
 # See https://wkhtmltopdf.org/status.html#summary
