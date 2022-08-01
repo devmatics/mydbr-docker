@@ -69,8 +69,14 @@ RUN apk add graphviz
 
 FROM base-php as base-php-wkhtmltopdf
 # WkHTMLToPDF lost Alpine support in 3.14 due to its primary dependecy Qt5-QtWebkit being unmainted for 3 years now.
+
+# WkHTMLToPDF has been on life support since 2016 and the project is dead as of 2020 by admission of the maintainer
+# See https://wkhtmltopdf.org/status.html#summary
+
 # Ideally MyDBR updates to use weasyprint, athenapdf, or puppeteer
-# See https://gitlab.alpinelinux.org/alpine/aports/-/issues/12888
+# the WkHTMLToPDF maintainer recommends weasyprint
+# See https://wkhtmltopdf.org/status.html#recommendations
+# See https://github.com/Kozea/WeasyPrint
 
 RUN mkdir -p /download
 
